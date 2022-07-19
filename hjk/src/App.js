@@ -1,23 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
+import Table2 from './Table/Tble2';
+import Companyregestertable from './Table/Companyregestertable';
+import Jobportaltable from './Table/Jobportaltable';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Companyregestertable/>
+      < Jobportaltable/>
+      <Table2/>
     </div>
   );
 }
