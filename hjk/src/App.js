@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="App">
       <Companyregestertable/>
-      < Jobportaltable/>
+      <Jobportaltable/>
       <Table2/>
     </div>
   );
