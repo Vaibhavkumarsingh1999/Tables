@@ -1,4 +1,6 @@
 import React from "react";
+import  { useEffect, useState ,useContext} from "react";
+import axios from 'axios';
 import {
   Collapse,
   Typography,
@@ -204,34 +206,35 @@ const dataTable = [
 
 export default function Companyregestertable() {
   const [open, setOpen] = React.useState(false);
-  const breakArrays = (parentArr) => {
-    if (parentArr.length > 1) {
-      let arrayFirst = []
-      for (let i = 0; i < 1; i++) {
-        arrayFirst[i] = parentArr[i]
-      }
-      let arraySecond = []
-      for (let i = 1; i < parentArr.length; i++) {
-        arraySecond[i] = parentArr[i]
-      }
-      return {
-        topArr: arrayFirst,
-        bottomArr: arraySecond
-      }
-    } else {
-      let arrayFirst = []
-      for (let i = 0; i < parentArr.length; i++) {
-        arrayFirst[i] = parentArr[i]
-      }
-      let arraySecond = []
-      return {
-        topArr: arrayFirst,
-        bottomArr: arraySecond
-      }
-    }
+  
+  
+  const [totalCount, setTotalCount] = useState('...')
+  const [rows,setRows]= useState([])
+  useEffect(()=>{
+    async function scanData () {
+        try {
+            const callRes = await axios({
+              url:"http://localhost:8081/company", method:'GET'
+        })
+            console.log(callRes.data.Items)
+            const dataRowArr = callRes.data.Items.map((item)=>{
+                return {
+                    id: item.id,
+                    address: item.address,
+                    category: item.category,
+                    contact: item.contact,
+                    country: item.country,
 
-  }
-  const arrays = breakArrays(dataTable)
+                }
+            })
+            console.log(dataRowArr)
+            setRows(dataRowArr)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    scanData()
+},[])
 
 
   return (
@@ -243,34 +246,34 @@ export default function Companyregestertable() {
 
 
             {
-              arrays.topArr.map((row, index) => {
+              rows.map((row, index) => {
                 return (
                   <TableRow key={row.id}>
 
                     <TableCell>{row.id}</TableCell>
 
-                    <TableCell>{row.name}</TableCell>
+                    <TableCell>{row.address}</TableCell>
 
-                    <TableCell>{row.email}</TableCell>
-                    <TableCell>{row.phone}</TableCell>
+                    <TableCell>{row.category}</TableCell>
                     <TableCell>{row.contact}</TableCell>
+                    <TableCell>{row.country}</TableCell>
                   </TableRow>
                 )
               })
             }
 
             {
-              arrays.bottomArr.map((row, index) => {
+              rows.map((row, index) => {
                 return (
                   <TableRow key={row.id} sx={{ display: !open ? "none" : null }}>
 
                     <TableCell>{row.id}</TableCell>
 
-                    <TableCell>{row.name}</TableCell>
+                    <TableCell>{row.address}</TableCell>
 
-                    <TableCell>{row.email}</TableCell>
-                    <TableCell>{row.phone}</TableCell>
+                    <TableCell>{row.category}</TableCell>
                     <TableCell>{row.contact}</TableCell>
+                    <TableCell>{row.country}</TableCell>
                   </TableRow>
                 )
               })

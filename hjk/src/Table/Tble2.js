@@ -1,4 +1,6 @@
 import React from "react";
+import  { useEffect, useState ,useContext} from "react";
+import axios from 'axios'
 import {
   Collapse,
   IconButton,
@@ -265,34 +267,35 @@ const dataTable = [
 
 export default function Table2() {
   const [open, setOpen] = React.useState(false);
-  const breakArrays = (parentArr) => {
-    if (parentArr.length > 1) {
-      let arrayFirst = []
-      for (let i = 0; i < 1; i++) {
-        arrayFirst[i] = parentArr[i]
-      }
-      let arraySecond = []
-      for (let i = 1; i < parentArr.length; i++) {
-        arraySecond[i] = parentArr[i]
-      }
-      return {
-        topArr: arrayFirst,
-        bottomArr: arraySecond
-      }
-    } else {
-      let arrayFirst = []
-      for (let i = 0; i < parentArr.length; i++) {
-        arrayFirst[i] = parentArr[i]
-      }
-      let arraySecond = []
-      return {
-        topArr: arrayFirst,
-        bottomArr: arraySecond
-      }
-    }
+ 
+  const [totalCount, setTotalCount] = useState('...')
+  const [rows,setRows]= useState([])
+  useEffect(()=>{
+    async function getUsers () {
+        try {
+            const callRes = await axios({
+              url:"http://localhost:8081/getUsers", method:'GET'
+        })
+            console.log(callRes.data.Users)
+            const dataRowArr = callRes.data.Users.map((item)=>{
+                return {
+                    email: item.Attributes[4].Value,
+                    name: item.Attributes[1].Value,
+                    website: item.Attributes[2].Value,
+                    phone_number: item.Attributes[3].Value,
+                    address: item.Attributes[0].Value
+                    
 
-  }
-  const arrays = breakArrays(dataTable)
+                }
+            })
+            console.log(dataRowArr)
+            setRows(dataRowArr)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    getUsers()
+},[])
 
 
   return (
@@ -303,34 +306,38 @@ export default function Table2() {
           <TableBody>
          
             {
-              arrays.topArr.map((row, index) => {
+              rows.map((row, index) => {
                 return (
                   <TableRow key={row.id}>
 
-                    <TableCell>{row.id}</TableCell>
-                    <TableCell>{row.avatar}</TableCell>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.surname}</TableCell>
                     <TableCell>{row.email}</TableCell>
-                    <TableCell>{row.phone}</TableCell>
-                    <TableCell>{row.contact}</TableCell>
+                    <TableCell>{row.name}</TableCell>
+                    <TableCell>{row.website}</TableCell>
+                    <TableCell>{row.phone_number}</TableCell>
+                    <TableCell>{row.address}</TableCell>
+
+
+
+
+                   
+                    
                   </TableRow>
                 )
               })
             }
 
             {
-              arrays.bottomArr.map((row, index) => {
+              rows.map((row, index) => {
                 return (
                   <TableRow key={row.id} sx={{ display: !open ? "none" : null }}>
-
-                    <TableCell>{row.id}</TableCell>
-                    <TableCell>{row.avatar}</TableCell>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.surname}</TableCell>
-                    <TableCell>{row.email}</TableCell>
-                    <TableCell>{row.phone}</TableCell>
-                    <TableCell>{row.contact}</TableCell>
+                     <TableCell>{row.email}</TableCell>
+                     <TableCell>{row.name}</TableCell>
+                     <TableCell>{row.website}</TableCell>
+                    <TableCell>{row.phone_number}</TableCell>
+                    <TableCell>{row.address}</TableCell>
+                   
+                    
+                    
                   </TableRow>
                 )
               })
